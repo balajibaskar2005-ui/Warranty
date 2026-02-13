@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Products{% endblock %}
+{% block content %}
+<div class="page-container">
+  <div class="page-header" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+    <h1>Products</h1>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <form method="get" style="display:flex;gap:10px;align-items:center;">
+        <input type="text" name="q" value="{{ request.args.get('q','') }}" placeholder="Search brand/model" style="padding:12px 14px;background:#141d30;border:1px solid #2a3a5f;border-radius:10px;color:#fff;min-width:320px;">
+        <button class="btn-primary" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+      </form>
+      <a href="{{ url_for('admin_dashboard') }}" class="btn-secondary"><i class="fa-solid fa-gauge"></i> Back to Dashboard</a>
+    </div>
+  </div>
+
+  <div class="content-box" style="margin-top:24px;">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Brand</th>
+          <th>Model</th>
+          <th>Day</th>
+          <th>Date &amp; Time</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+        <tr>
+          <td>{{ (page - 1) * size + loop.index }}</td>
+          <td>{{ p.brand }}</td>
+          <td>{{ p.model_name }}</td>
+          <td>{{ p.added_day or '-' }}</td>
+          <td>{{ p.added_datetime or '-' }}</td>
+          <td>
+            <a href="{{ url_for('admin_edit_product', product_id=p.product_id) }}" class="btn-secondary btn-sm"><i class="fa-solid fa-pen"></i> Edit</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="empty-state">No products found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
